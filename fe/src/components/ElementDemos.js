@@ -2,15 +2,10 @@ import React from "react";
 import {
   Switch,
   Route,
-  Redirect,
-  useLocation,
-  useHistory
+  Redirect
 } from "react-router-dom";
 
 const ElementDemos = ({ demos }) => {
-  const location = useLocation();
-  const history = useHistory();
-
   return (
     <div className="DemoWrapper">
       <Switch>
