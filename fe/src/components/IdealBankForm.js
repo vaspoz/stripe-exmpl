@@ -55,6 +55,28 @@ const IdealBankForm = () => {
       }
     });
     console.log("[PaymentMethod]", payload);
+
+    Object.assign(payload, {return_url: 'http://localhost:5000/confirm'});
+    console.log('payload', payload);
+
+    // (async () => {
+      const response = await fetch('http://localhost:5000/secret');
+      const {client_secret: clientSecret} = await response.json();
+      console.log("[client_secret]", clientSecret);
+      // Call stripe.confirmIdealPayment() with the client secret.
+    // })();
+
+    const {error} = await stripe.confirmIdealPayment(clientSecret, {
+      payment_method: {
+        ideal: elements.getElement(IdealBankElement),
+        billing_details: {
+          name: event.target.name.value,
+        },
+      },
+      return_url: 'http://localhost:5000/confirm',
+    });
+
+    
   };
 
   return (
@@ -68,17 +90,8 @@ const IdealBankForm = () => {
         <IdealBankElement
           className="IdealBankElement"
           options={options}
-          onReady={() => {
-            console.log("IdealBankElement [ready]");
-          }}
           onChange={event => {
             console.log("IdealBankElement [change]", event);
-          }}
-          onBlur={() => {
-            console.log("IdealBankElement [blur]");
-          }}
-          onFocus={() => {
-            console.log("IdealBankElement [focus]");
           }}
         />
       </label>
